@@ -1,0 +1,30 @@
+<index>
+    <head>
+        {% if title %}
+        <title>{{ title }} - Corpus Viewer</title>
+        {% else %}
+        <title>Welcome to Corpus Viewer</title>
+        {% endif %}
+    </head>
+    <body>
+        <div>
+            Corpus Viewer: 
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('view') }}">View</a>
+            <a href="{{ url_for('upload') }}">Upload</a>
+        <div>
+        <hr>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li> {{ message }} </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </body>
+</html>
+
+
