@@ -1,5 +1,6 @@
 import io
 from flask import Flask, render_template, flash, redirect, url_for, request
+from flask_triangle import Triangle
 from flask_uploads import UploadSet, configure_uploads 
 # add to import line above PDFs and remove IMAGES
 from app import app
@@ -26,6 +27,11 @@ def index():
     docimage = '/static/doge.jpeg'
 
     return render_template('index.html', title='home', corpus=corpus, documents=documents, docimage=docimage)
+
+@app.route('/angular', methods=['GET', 'POST'])
+def angular():
+    return render_template('angular.html')
+
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
