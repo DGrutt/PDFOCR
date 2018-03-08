@@ -1,58 +1,28 @@
-<!DOCTYPE html>
-<html>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js">
-</script>
-<body>
+{% extends "base.html" %}
+
+{%block content %}
     <ul>
     {%- for item in tree.children recursive %}
-        <li>{{ item.name }}<a href="{{ item.name }}| uppercase" ng-model="test"> test</a>
-        {%- if item.children -%}
+        <li>{{ item.name[11:] }}<a href="{{ item.name }}"> link</a>
+
+    <!--       {%- if item.children -%}
             <ul>{{ loop(item.children) }}</ul>
-        <!-- <ul><a href="/static/{{ loop(item.children) }}">{{ loop(item.children) }}</a></ul> -->
-        {%- endif %}</li>
+        {%- endif %}</li> -->
    {%- endfor %}
     </ul>
     <p>
-    <a href="/static/img/IEM.pdf">test</a>
-
 
 <div ng-app="myApp" ng-controller="personCtrl">
-
-<p>The name is {{ lastName|angular }}</p>
-
+<p>The name is {{"lastName|uppercase"|angular}}</p>
 </div>
 
 <script>
 angular.module('myApp', []).controller('personCtrl', function($scope) {
     $scope.firstName = "John",
-    $scope.lastName = "Doe"
+    $scope.lastName = "Doe",
+    $scope.test = "this is a test"
 });
 </script>
 
-
-
-
-<script>
-//    angular.module('', [])
-//    .filter('makeLinks', function(){
-    //this filter turns the file names into clickable links
-//    return function makeLinks(item) {
-//        return item.replace("/app", "");
-//    }
-//    })
-//
-//    'use strict';
-//    (function() {
-//        function rename($scope) {
-//            $scope.test = "";
-//    } 
-//    angular.module('')
-//        .controller('rename', rename)
-//    })
-
-
-</script>
-
-</body>
-</html>
+{% endblock %}
 

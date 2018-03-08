@@ -54,8 +54,9 @@ def make_tree(path):
             if os.path.isdir(fn):
                 tree['children'].append(make_tree(fn))
             else:
-                tree['children'].append(dict(name=fn))
-    return tree     
+                tree['children'].append(dict(name=fn[4:]))
+    #tree['children'] ={k: v[4:] for k, v in tree.items()}
+    return tree  
 
 @app.route('/complete', methods=['GET', 'POST'])
 def complete():
