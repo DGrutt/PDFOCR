@@ -9,6 +9,7 @@ from PIL import Image
 import pytesseract
 from wand.image import Image as wi
 import os
+from uuid import uuid4
 
 @app.route('/')
 @app.route('/index')
@@ -35,11 +36,11 @@ def angular():
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
-    photos = UploadSet('photos', ['pdf'])
-    app.config['UPLOADED_PHOTOS_DEST'] = 'app/static/img'
-    configure_uploads(app, photos)
+    pdfs = UploadSet('pdfs', ['pdf'])
+    app.config['UPLOADED_PDFS_DEST'] = 'app/static/img'
+    configure_uploads(app, pdfs)
     if request.method == 'POST' and 'photo' in request.files:
-        filename = photos.save(request.files['photo'])
+        filename = pdfs.save(request.files['photo'])
         return filename 
     return render_template('upload.html')
 
@@ -75,6 +76,11 @@ def view():
     convertPDF= wi(filename ='app/static/Bostrom.pdf', resolution = 300)
     pdfImage = convertPDF.convert('jpeg')
 
+    #3 lines below pulled from the upload function
+    #photos = UploadSet('photos', ['pdf'])
+    #app.config['UPLOADED_PHOTOS_DEST'] = 'app/static/img'
+    #configure_uploads(app, photos)
+    
     imageBlobs = []
     
     for img in pdfImage.sequence:
