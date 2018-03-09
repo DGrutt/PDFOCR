@@ -76,11 +76,6 @@ def view():
     convertPDF= wi(filename ='app/static/Bostrom.pdf', resolution = 300)
     pdfImage = convertPDF.convert('jpeg')
 
-    #3 lines below pulled from the upload function
-    #photos = UploadSet('photos', ['pdf'])
-    #app.config['UPLOADED_PHOTOS_DEST'] = 'app/static/img'
-    #configure_uploads(app, photos)
-    
     imageBlobs = []
     
     for img in pdfImage.sequence:
@@ -92,7 +87,12 @@ def view():
     for imgBlob in imageBlobs:
         im = Image.open(io.BytesIO(imgBlob))
         text = pytesseract.image_to_string(im, lang = 'eng')
+        outputName=PDF[:-4]
+        outputName=outputName[8:]
+        testvar = './app/static/txts/'+outputName+ '.txt'
         recognized_text.append(text)
+        with open(testvar, 'w') as f: f.write(str(recognized_text))
+        #with open('./app/static/txts/output2.txt', 'w') as f: f.write(str(recognized_text))
     return render_template('view.html', title='View', docimage=docimage, form=form, text=text, PDF=PDF, recText=recognized_text)
 
 
