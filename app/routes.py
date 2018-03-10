@@ -40,7 +40,7 @@ def upload():
     app.config['UPLOADED_PDFS_DEST'] = 'app/static/img'
     configure_uploads(app, pdfs)
     if request.method == 'POST' and 'photo' in request.files:
-        filename = pdfs.save(request.files['photo'])
+        filename = pdfs.save(request.files['photo']) 
         return filename 
     return render_template('upload.html')
 
@@ -64,6 +64,78 @@ def complete():
     path = os.path.expanduser(u'~')
     #return render_template('complete.html', tree=make_tree("/home/dan/PDFOCR/app/static/img"))
     return render_template('complete.html', tree=make_tree("app/static/img"))
+
+@app.route('/OCR_All', methods=['GET', 'POST'])
+def OCR_All():
+    if request.method == 'POST':
+        def ocr(file_to_ocr):
+            im = Image.open(file_to_ocr)
+            txt = pytesseract.image_to_string(im, lang='eng')
+            return txt
+           
+
+        directory = os.path.join("app/static/img")
+        for root,dirs,files in os.walk(directory):
+            for file in files:
+                if file.endswith(".png"):
+                    pre_fix=file[:-4]
+                    txt=ocr("./app/static/img/"+file)
+                    with open(directory+"//"+pre_fix+".txt", 'w') as f: f.write(str(txt)) 
+    #find a way to add this line to the code on the line above so you don't ocr completed files
+    #if os.path.isfile(directory+"//"+pre_fix+".txt")==False: 
+                            
+    #if request.method == 'POST':
+    #    pass
+    return(render_template("OCR_all.html"))
+    
+    pass
+        #insert these lines from OCRing in view to OCRing on upload
+        #docimage = '/static/Irregularis_sampletext.png'
+        #im = Image.open('app/static/Irregularis_sampletext.png')
+        #text = pytesseract.image_to_string(im, lang = 'eng')
+        #PDF = (request.files['photo'])
+        #convertPDF= wi(filename = PDF, resolution = 300)
+        #pdfImage = convertPDF.convert('jpeg')
+        #imageBlobs = []
+    
+        #for img in pdfImage.sequence:
+            #imgPage = wi(image = img)
+            #imageBlobs.append(imgPage.make_blob('jpeg'))
+
+        #recognized_text = []
+
+        #for imgBlob in imageBlobs:
+            #im = Image.open(io.BytesIO(imgBlob))
+            #text = pytesseract.image_to_string(im, lang = 'eng')
+            #outputName=PDF[:-4]
+            #outputName=outputName[8:]
+            #testvar = './app/static/txts/'+outputName+ '.txt'
+            #recognized_text.append(text)
+            #with open(testvar, 'w') as f: f.write(str(recognized_text))
+        #insert these lines from OCRing in view to OCRing on upload
+        #docimage = '/static/Irregularis_sampletext.png'
+        #im = Image.open('app/static/Irregularis_sampletext.png')
+        #text = pytesseract.image_to_string(im, lang = 'eng')
+        #PDF = (request.files['photo'])
+        #convertPDF= wi(filename = PDF, resolution = 300)
+        #pdfImage = convertPDF.convert('jpeg')
+        #imageBlobs = []
+    
+        #for img in pdfImage.sequence:
+            #imgPage = wi(image = img)
+            #imageBlobs.append(imgPage.make_blob('jpeg'))
+
+        #recognized_text = []
+
+        #for imgBlob in imageBlobs:
+            #im = Image.open(io.BytesIO(imgBlob))
+            #text = pytesseract.image_to_string(im, lang = 'eng')
+            #outputName=PDF[:-4]
+            #outputName=outputName[8:]
+            #testvar = './app/static/txts/'+outputName+ '.txt'
+            #recognized_text.append(text)
+            #with open(testvar, 'w') as f: f.write(str(recognized_text))
+
 
 @app.route('/view', methods=['GET', 'POST'] )
 #Note the code to display a jpeg is still in this function but unused.
