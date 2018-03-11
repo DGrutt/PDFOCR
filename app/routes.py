@@ -73,10 +73,20 @@ def OCR_All():
             txt = pytesseract.image_to_string(im, lang='eng')
             return txt
            
+        def pdfOCR(pdf_to_ocr):
+            #function to OCR pdfs one by one
+            PDF = pdf_to_ocr 
+            #convertPDF= wi(filename =PDF, resolution = 300)
+            #pdfImage = convertPDF.convert('jpeg')
+            return PDF
 
         directory = os.path.join("app/static/img")
         for root,dirs,files in os.walk(directory):
             for file in files:
+                if file.endswith(".pdf"):
+                    pre_fix=file[:-4]
+                    text=pdfOCR("./app/static/img/" + file)
+                    with open(directory+"//"+pre_fix+".txt", 'w') as f: f.write(str(text)) 
                 if file.endswith(".png"):
                     pre_fix=file[:-4]
                     txt=ocr("./app/static/img/"+file)
@@ -87,63 +97,14 @@ def OCR_All():
     #if request.method == 'POST':
     #    pass
     return(render_template("OCR_all.html"))
-    
-    pass
-        #insert these lines from OCRing in view to OCRing on upload
-        #docimage = '/static/Irregularis_sampletext.png'
-        #im = Image.open('app/static/Irregularis_sampletext.png')
-        #text = pytesseract.image_to_string(im, lang = 'eng')
-        #PDF = (request.files['photo'])
-        #convertPDF= wi(filename = PDF, resolution = 300)
-        #pdfImage = convertPDF.convert('jpeg')
-        #imageBlobs = []
-    
-        #for img in pdfImage.sequence:
-            #imgPage = wi(image = img)
-            #imageBlobs.append(imgPage.make_blob('jpeg'))
-
-        #recognized_text = []
-
-        #for imgBlob in imageBlobs:
-            #im = Image.open(io.BytesIO(imgBlob))
-            #text = pytesseract.image_to_string(im, lang = 'eng')
-            #outputName=PDF[:-4]
-            #outputName=outputName[8:]
-            #testvar = './app/static/txts/'+outputName+ '.txt'
-            #recognized_text.append(text)
-            #with open(testvar, 'w') as f: f.write(str(recognized_text))
-        #insert these lines from OCRing in view to OCRing on upload
-        #docimage = '/static/Irregularis_sampletext.png'
-        #im = Image.open('app/static/Irregularis_sampletext.png')
-        #text = pytesseract.image_to_string(im, lang = 'eng')
-        #PDF = (request.files['photo'])
-        #convertPDF= wi(filename = PDF, resolution = 300)
-        #pdfImage = convertPDF.convert('jpeg')
-        #imageBlobs = []
-    
-        #for img in pdfImage.sequence:
-            #imgPage = wi(image = img)
-            #imageBlobs.append(imgPage.make_blob('jpeg'))
-
-        #recognized_text = []
-
-        #for imgBlob in imageBlobs:
-            #im = Image.open(io.BytesIO(imgBlob))
-            #text = pytesseract.image_to_string(im, lang = 'eng')
-            #outputName=PDF[:-4]
-            #outputName=outputName[8:]
-            #testvar = './app/static/txts/'+outputName+ '.txt'
-            #recognized_text.append(text)
-            #with open(testvar, 'w') as f: f.write(str(recognized_text))
-
 
 @app.route('/view', methods=['GET', 'POST'] )
-#Note the code to display a jpeg is still in this function but unused.
+#Commented out code to display a jpeg is still in this function.
 def view():
     form = ViewForm()
-    docimage = '/static/Irregularis_sampletext.png'
-    im = Image.open('app/static/Irregularis_sampletext.png')
-    text = pytesseract.image_to_string(im, lang = 'eng')
+    #docimage = '/static/Irregularis_sampletext.png'
+    #im = Image.open('app/static/Irregularis_sampletext.png')
+    #text = pytesseract.image_to_string(im, lang = 'eng')
     PDF = '/static/Bostrom.pdf'
     convertPDF= wi(filename ='app/static/Bostrom.pdf', resolution = 300)
     pdfImage = convertPDF.convert('jpeg')
@@ -165,6 +126,6 @@ def view():
         recognized_text.append(text)
         with open(testvar, 'w') as f: f.write(str(recognized_text))
         #with open('./app/static/txts/output2.txt', 'w') as f: f.write(str(recognized_text))
-    return render_template('view.html', title='View', docimage=docimage, form=form, text=text, PDF=PDF, recText=recognized_text)
+    return render_template('view.html', title='View', form=form, text=text, PDF=PDF, recText=recognized_text)
 
 
