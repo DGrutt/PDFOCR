@@ -77,10 +77,28 @@ def OCR_All():
             #function to OCR pdfs one by one
             PDF = pdf_to_ocr 
             #figure out why wi returns none below when filename is PDF or hardcoded
-            convertPDF= wi(filename='./app/static/img/Bostrom.pdf', resolution = 300)
-            #pdfImage = convertPDF.convert('jpeg')
-            #return PDF
-            return PDF
+            #convertPDF= wi(filename='./app/static/img/Bostrom.pdf', resolution = 300)
+            convertPDF=wi(filename=PDF, resolution = 300)
+            pdfImage = convertPDF.convert('jpeg')
+            
+            
+            imageBlobs = []
+    
+            for img in pdfImage.sequence:
+                imgPage = wi(image = img)
+                imageBlobs.append(imgPage.make_blob('jpeg'))
+
+            recognized_text = []
+
+            for imgBlob in imageBlobs:
+                im = Image.open(io.BytesIO(imgBlob))
+                text = pytesseract.image_to_string(im, lang = 'eng')
+                outputName=PDF[:-4]
+                outputName=outputName[8:]
+                testvar = './app/static/txts/'+outputName+ '.txt'
+                recognized_text.append(text)
+
+            return recognized_text
 
         directory = os.path.join("app/static/img")
         for root,dirs,files in os.walk(directory):
