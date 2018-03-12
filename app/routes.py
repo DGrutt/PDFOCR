@@ -76,8 +76,10 @@ def OCR_All():
         def pdfOCR(pdf_to_ocr):
             #function to OCR pdfs one by one
             PDF = pdf_to_ocr 
-            #convertPDF= wi(filename =PDF, resolution = 300)
+            #figure out why wi returns none below when filename is PDF or hardcoded
+            convertPDF= wi(filename='./app/static/img/Bostrom.pdf', resolution = 300)
             #pdfImage = convertPDF.convert('jpeg')
+            #return PDF
             return PDF
 
         directory = os.path.join("app/static/img")
