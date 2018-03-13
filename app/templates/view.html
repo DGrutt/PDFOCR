@@ -1,12 +1,39 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+
+<!--
+<div ng-app = "">
+
+
+<p>Input something in the input box:</p>
+<p>Name:<input type="text" ng-model="name"></p>
+<p ng-bind="name"></p>
+</div>
+-->
+<div ng-controller="MainCtrl">
+<ng-include src="humanstxt.org/humans.txt">ya ya</ng-include>
+</div>
+
     <p>
     <iframe width="900"
 	    height="900" 
 	src={{PDF}}> </iframe>
+    </p>
     <p>
     {{recText}}
-{% endblock %}
+    </p>
 
+
+<script>
+var app = angular.module('', []);
+
+app.controller('MainCtrl', function($scope) {
+    $scope.name = 'World';
+    });
+</script>
+
+
+{% endblock %}
 

@@ -2,7 +2,7 @@
 
 {% block content %}	
 	<h1>Welcome to, {{corpus.corpusname}}!</h1>
-        <embed src={{docimage}}>   
+        <!--<embed src={{docimage}}>   -->
         {% for document in documents%}
         <div><p>{{document.docID.docname}} states: <b> {{document.body}}</b></p></div>
         {% endfor %}

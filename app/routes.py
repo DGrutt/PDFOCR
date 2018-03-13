@@ -119,33 +119,14 @@ def OCR_All():
     return(render_template("OCR_all.html"))
 
 @app.route('/view', methods=['GET', 'POST'] )
-#Commented out code to display a jpeg is still in this function.
 def view():
     form = ViewForm()
-    #docimage = '/static/Irregularis_sampletext.png'
-    #im = Image.open('app/static/Irregularis_sampletext.png')
-    #text = pytesseract.image_to_string(im, lang = 'eng')
     PDF = '/static/Bostrom.pdf'
     convertPDF= wi(filename ='app/static/Bostrom.pdf', resolution = 300)
     pdfImage = convertPDF.convert('jpeg')
-
-    imageBlobs = []
     
-    for img in pdfImage.sequence:
-        imgPage = wi(image = img)
-        imageBlobs.append(imgPage.make_blob('jpeg'))
-
-    recognized_text = []
-
-    for imgBlob in imageBlobs:
-        im = Image.open(io.BytesIO(imgBlob))
-        text = pytesseract.image_to_string(im, lang = 'eng')
-        outputName=PDF[:-4]
-        outputName=outputName[8:]
-        testvar = './app/static/txts/'+outputName+ '.txt'
-        recognized_text.append(text)
-        with open(testvar, 'w') as f: f.write(str(recognized_text))
-        #with open('./app/static/txts/output2.txt', 'w') as f: f.write(str(recognized_text))
-    return render_template('view.html', title='View', form=form, text=text, PDF=PDF, recText=recognized_text)
+    with open("app/static/img/Bostrom.txt", "r") as f: 
+        recognized_text = f.read()            
+    return render_template('view.html', title='View', form=form, PDF=PDF, recText=recognized_text)
 
 
