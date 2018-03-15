@@ -97,7 +97,12 @@ def OCR_All():
                 outputName=outputName[8:]
                 testvar = './app/static/txts/'+outputName+ '.txt'
                 recognized_text.append(text)
-
+           
+             
+            #for n, i in enumerate(recognized_text):
+            #    if i == "/n":
+            #        recognized_text[n]="<br>"
+            #recognized_text="<br />".join(recognized_text.split("\n"))
             return recognized_text
 
         directory = os.path.join("app/static/img")
@@ -126,7 +131,24 @@ def view():
     pdfImage = convertPDF.convert('jpeg')
     
     with open("app/static/img/Bostrom.txt", "r") as f: 
-        recognized_text = f.read()            
+        
+        recognized_text = f.read()
+        recognized_text=recognized_text.decode("utf-8").replace('\\n'," ")
+        #print('\n\n\n\n\n\n')
+        #print(recognized_text)
+        #recognized_text = recognized_text.replace('\n', '')
+        #print(recognized_text)
+        #print(type(recognized_text))
+        #.replace('\n', '')  
+       
+
+ 
+        #recognized_text="".join(recognized_text)
+        #recognized_text="<br />".join(recognized_text.split("\n"))
+        #recognized_text="foo"
+        #for n, i in enumerate(recognized_text):
+        #        if i == "/n":
+        #            recognized_text[n]="<br>"
     return render_template('view.html', title='View', form=form, PDF=PDF, recText=recognized_text)
 
 
