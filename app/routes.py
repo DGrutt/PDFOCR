@@ -59,6 +59,34 @@ def make_tree(path):
     #tree['children'] ={k: v[4:] for k, v in tree.items()}
     return tree  
 
+def matchFind(corpus, keyword):
+        A = corpus
+        B = keyword
+        C = A.split()
+        D = B.split()
+        Both = []
+        for x in C:
+            if x in D:
+                Both.append(x)
+        for x in range(len(Both)):
+            Both[x]=str(Both[x])
+        Final = []
+        for x in set(Both):
+            Final.append(x)
+        MissingA = []
+        for x in C:
+            if x not in Final and x not in MissingA:
+                MissingA.append(x)
+        for x in range(len(MissingA)):
+            MissingA[x]=str(MissingA[x])
+        MissingB = []
+        for x in D:
+            if x not in Final and x not in MissingB:
+                MissingB.append(x)
+        for x in range(len(MissingB)):
+            MissingB[x]=str(MissingB[x])
+        return Final
+
 @app.route('/complete', methods=['GET', 'POST'])
 def complete():
     path = os.path.expanduser(u'~')
@@ -129,26 +157,16 @@ def view():
     PDF = '/static/Bostrom.pdf'
     convertPDF= wi(filename ='app/static/Bostrom.pdf', resolution = 300)
     pdfImage = convertPDF.convert('jpeg')
-    
+
+    keywords = 'galactic supercluster bitcoin'
+
     with open("app/static/img/Bostrom.txt", "r") as f: 
         
         recognized_text = f.read()
         recognized_text=recognized_text.decode("utf-8").replace('\\n'," ")
-        #print('\n\n\n\n\n\n')
-        #print(recognized_text)
-        #recognized_text = recognized_text.replace('\n', '')
-        #print(recognized_text)
-        #print(type(recognized_text))
-        #.replace('\n', '')  
-       
 
- 
-        #recognized_text="".join(recognized_text)
-        #recognized_text="<br />".join(recognized_text.split("\n"))
-        #recognized_text="foo"
-        #for n, i in enumerate(recognized_text):
-        #        if i == "/n":
-        #            recognized_text[n]="<br>"
-    return render_template('view.html', title='View', form=form, PDF=PDF, recText=recognized_text)
+    matches = matchFind(recognized_text, keywords)
+
+    return render_template('view.html', title='View', form=form, PDF=PDF, recText=recognized_text, keywords=keywords, matches=matches)
 
 
