@@ -5,6 +5,7 @@ from flask_uploads import UploadSet, configure_uploads
 # add to import line above PDFs and remove IMAGES
 from app import app
 from app.forms import ViewForm
+from app.models import Document
 from PIL import Image
 import pytesseract
 from wand.image import Image as wi
@@ -44,6 +45,10 @@ def upload():
     configure_uploads(app, pdfs)
     if request.method == 'POST' and 'photo' in request.files:
         filename = pdfs.save(request.files['photo']) 
+        #doc =Document(txtLocation="app/static/img/"+filename[:-4]+".txt", imgLocation ="/static/"+filename)
+        #db.session.add(doc)
+        #db.session.commit()
+        #need to update above based on https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-ix-pagination with code on submitting posts
         return filename 
     return render_template('upload.html')
 

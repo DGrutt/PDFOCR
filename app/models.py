@@ -1,9 +1,11 @@
 from app import db
 
-class Corpus(db.Model):
+class Document(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    corpusname = db.Column(db.String(64), index=True, unique=True)
+    txtLocation = db.Column(db.String(300), index=True, unique=True)
+    imgLocation = db.Column(db.String(300), index=True, unique=True)
+
 
     def __repr__(self):
-        return '<Corpus {}>'.format(self.corpusname)
+        return '<Document {}>'.format(self.txtLocation)
 
