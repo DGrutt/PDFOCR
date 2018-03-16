@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{%block content %}
+    <ul>
+    {% for item in tree.children %} {{loop.index}}
+        <li> {{ item.name[11:] }}<a href="{{ item.name }}"> link</a>
+    {%- endfor %}
+    </ul>
+{% endblock %}

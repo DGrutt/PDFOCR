@@ -9,6 +9,7 @@ from PIL import Image
 import pytesseract
 from wand.image import Image as wi
 import os
+#from matchFind import matchFind
 from uuid import uuid4
 
 @app.route('/')
@@ -25,14 +26,16 @@ def index():
         'body': 'Another sample text'
     }
     ]
-    docimage = '/static/doge.jpeg'
 
-    return render_template('index.html', title='home', corpus=corpus, documents=documents, docimage=docimage)
+    return render_template('index.html', title='home', corpus=corpus, documents=documents)
 
 @app.route('/angular', methods=['GET', 'POST'])
 def angular():
     return render_template('angular.html')
 
+@app.route('/numberedView', methods=['GET', 'POST'])
+def numberedView():
+    return render_template('numberedView.html', tree=make_tree("app/static/img") )
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
@@ -154,6 +157,8 @@ def OCR_All():
 @app.route('/view', methods=['GET', 'POST'] )
 def view():
     form = ViewForm()
+    #create function to walk through documents using dictionary below
+    DocumentsDict={}
     PDF = '/static/Bostrom.pdf'
     convertPDF= wi(filename ='app/static/Bostrom.pdf', resolution = 300)
     pdfImage = convertPDF.convert('jpeg')
