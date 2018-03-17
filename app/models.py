@@ -7,5 +7,5 @@ class Document(db.Model):
 
 
     def __repr__(self):
-        return '<Document {}>'.format(self.txtLocation)
+        return '<Document {} {}>'.format("text "+self.imgLocation, self.txtLocation)
 
