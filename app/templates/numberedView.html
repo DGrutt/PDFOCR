@@ -2,7 +2,7 @@
 
 {%block content %}
     <ul>
-    {% for item in tree.children %} {{loop.index}}
+    {% for item in tree.children %} <!-- {{loop.index}} -->
         <li> {{ item.name[11:] }}<a href="{{ item.name }}"> link</a>
     {%- endfor %}
     </ul>
@@ -11,8 +11,9 @@ Query all:
 {{Doc}}
 {% for item in Doc %}
     <li> <a href="{{item.imgLocation}}" </a>{{item.imgLocation}}
-    <li> <a href="/{{item.txtLocation}}" </a>{{item.txtLocation}}
+    <li> <a href="{{item.txtLocation}}" </a>{{item.txtLocation}}
 {%- endfor %}
+</a>
 <p>
 pagination object:
 {{pageViews}}
