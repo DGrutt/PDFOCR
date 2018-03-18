@@ -7,5 +7,13 @@
     {%- endfor %}
     </ul>
 
+Query all:
+{{Doc}}
+{% for item in Doc %}
+    <li> <a href="{{item.imgLocation}}" </a>{{item.imgLocation}}
+    <li> <a href="/{{item.txtLocation}}" </a>{{item.txtLocation}}
+{%- endfor %}
+<p>
+pagination object:
 {{pageViews}}
 {% endblock %}

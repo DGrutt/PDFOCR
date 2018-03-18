@@ -37,7 +37,8 @@ def angular():
 @app.route('/numberedView', methods=['GET', 'POST'])
 def numberedView():
     pageViews = Document.query.paginate(1,1,False)
-    return render_template('numberedView.html', tree=make_tree("app/static/img"), pageViews=pageViews.items )
+    Doc = Document.query.all()
+    return render_template('numberedView.html', tree=make_tree("app/static/img"), pageViews=pageViews.items, Doc=Doc )
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
@@ -46,7 +47,7 @@ def upload():
     configure_uploads(app, pdfs)
     if request.method == 'POST' and 'photo' in request.files:
         filename = pdfs.save(request.files['photo']) 
-        doc =Document(txtLocation="app/static/img/"+filename[:-4]+".txt", imgLocation ="/static/"+filename)
+        doc =Document(txtLocation="/static/"+filename[:-4]+".txt", imgLocation ="/static/img/"+filename)
         db.session.add(doc)
         db.session.commit()
         #need to update above based on https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-ix-pagination with code on submitting posts
