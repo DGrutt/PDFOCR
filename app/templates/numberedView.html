@@ -10,8 +10,8 @@
 Query all:
 {{Doc}}
 {% for item in Doc %}
-    <li> <a href="{{item.imgLocation}}" </a>{{item.imgLocation}}
-    <li> <a href="{{item.txtLocation}}" </a>{{item.txtLocation}}
+    <li> <p> <iframe width ="900" height ="900" src="{{item.imgLocation}}"></iframe>{{item.imgLocation}}
+    <li> <p> <iframe width ="900" height ="900" src="{{item.txtLocation}}"></iframe>{{item.txtLocation}}
 {%- endfor %}
 </a>
 <p>
