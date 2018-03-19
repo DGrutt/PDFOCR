@@ -3,9 +3,11 @@
 {% block content %}
 
     <p>
-    <form method=POST>
-        <input type="submit" value="test">
+    <form action= "" method="post">
+        {{ form.keywords.label}}
+        {{form.keywords(size=90)}}
+        {{form.submit() }}
     </form>
-    <p>
+    </p>
 {% endblock %}
 

@@ -4,7 +4,7 @@ from flask_triangle import Triangle
 from flask_uploads import UploadSet, configure_uploads 
 # add to import line above PDFs and remove IMAGES
 from app import app, db
-from app.forms import ViewForm
+from app.forms import ViewForm, KeywordForm
 from app.models import Document
 from PIL import Image
 import pytesseract
@@ -36,7 +36,8 @@ def angular():
 
 @app.route('/keywordMatches', methods=['GET', 'POST'])
 def keywordMatches():
-    return render_template('keywordMatches.html')
+    form = KeywordForm()
+    return render_template('keywordMatches.html', form=form)
 
 @app.route('/numberedView', methods=['GET', 'POST'])
 def numberedView():
