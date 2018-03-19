@@ -51,7 +51,7 @@ def upload():
     configure_uploads(app, pdfs)
     if request.method == 'POST' and 'photo' in request.files:
         filename = pdfs.save(request.files['photo']) 
-        doc =Document(txtLocation="/static/img/"+filename[:-4]+".txt", imgLocation ="/static/img/"+filename)
+        doc =Document(txtLocation="/static/img/"+filename[:-4]+".txt", imgLocation ="/static/img/"+filename, keywordMatches="test")
         db.session.add(doc)
         db.session.commit()
         #need to update above based on https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-ix-pagination with code on submitting posts
