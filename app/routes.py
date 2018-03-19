@@ -34,6 +34,10 @@ def index():
 def angular():
     return render_template('angular.html')
 
+@app.route('/keywordMatches', methods=['GET', 'POST'])
+def keywordMatches():
+    return render_template('keywordMatches.html')
+
 @app.route('/numberedView', methods=['GET', 'POST'])
 def numberedView():
     pageViews = Document.query.paginate(1,1,False)
