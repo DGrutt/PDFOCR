@@ -38,7 +38,11 @@ def angular():
 def numberedView():
     pageViews = Document.query.paginate(1,1,False)
     Doc = Document.query.all()
-    return render_template('numberedView.html', tree=make_tree("app/static/img"), pageViews=pageViews.items, Doc=Doc )
+    DocText = ""
+    for item in Doc:
+        with open("app"+item.txtLocation, "r") as f:
+            DocText = f.read()
+    return render_template('numberedView.html', tree=make_tree("app/static/img"), pageViews=pageViews.items, Doc=Doc, DocText=DocText)
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
