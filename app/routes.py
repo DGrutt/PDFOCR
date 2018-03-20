@@ -50,7 +50,8 @@ def keywordMatches():
 
 @app.route('/numberedView', methods=['GET', 'POST'])
 def numberedView():
-    pageViews = Document.query.paginate(1,1,False)
+    page = request.args.get('page', 1, type=int)
+    pageViews = Document.query.paginate(page,1,False)
     Doc = Document.query.all()
     DocText = ""
     for item in Doc:
