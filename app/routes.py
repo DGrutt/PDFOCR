@@ -37,6 +37,11 @@ def angular():
 @app.route('/keywordMatches', methods=['GET', 'POST'])
 def keywordMatches():
     form = KeywordForm()
+    if request.method == 'POST':
+        Doc = Document.query.all()
+        for item in Doc:
+            item.keywordMatches=form.keywords.data
+        db.session.commit()
     return render_template('keywordMatches.html', form=form)
 
 @app.route('/numberedView', methods=['GET', 'POST'])

@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import RadioField, SubmitField, StringField
+from wtforms import RadioField, SubmitField, StringField, TextAreaField
 from wtforms.validators import DataRequired
 
 class ViewForm(FlaskForm):
@@ -7,5 +7,6 @@ class ViewForm(FlaskForm):
     submit = SubmitField('next')
 
 class KeywordForm(FlaskForm):
-    keywords = StringField('Keywords', validators=[DataRequired()])
+    #keywords = TextAreaField('Keywords', validators=[DataRequired()]) 
+    keywords = TextAreaField('Keywords')
     submit = SubmitField("Submit")
