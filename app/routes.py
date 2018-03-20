@@ -89,7 +89,7 @@ def make_tree(path):
 
 def matchFind(corpus, keyword):
         A = corpus
-        B = keyword
+        B = keyword.lower()
         C = A.split()
         D = B.split()
         Both = []
@@ -159,7 +159,7 @@ def OCR_All():
             #    if i == "/n":
             #        recognized_text[n]="<br>"
             #recognized_text="<br />".join(recognized_text.split("\n"))
-            return recognized_text
+            return str(recognized_text).lower()
 
         directory = os.path.join("app/static/img")
         for root,dirs,files in os.walk(directory):
