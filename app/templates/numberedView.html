@@ -7,6 +7,19 @@
     {%- endfor %}
     </ul>
 
+{% if prev_url %}
+<a href= "{{ prev_url }}">Previous Document</a>
+{% endif %}
+
+{% if next_url %}
+<a href= "{{ next_url }}">Next Document</a>
+{% endif %}
+
+<p>
+pagination object:
+<p>
+{{pageViews}}
+<p>
 Query all:
 {{Doc}}
 {% for item in Doc %}
@@ -14,10 +27,6 @@ Query all:
     <li> <p> <iframe width ="900" height ="900" src="{{item.txtLocation}}"></iframe>{{item.txtLocation}}
 {%- endfor %}
 </a>
-<p>
-pagination object:
-<p>
-{{pageViews}}
 <p>
 Document text:
 <p>

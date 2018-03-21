@@ -52,12 +52,16 @@ def keywordMatches():
 def numberedView():
     page = request.args.get('page', 1, type=int)
     pageViews = Document.query.paginate(page,1,False)
+    next_url = url_for('numberedView', page=pageViews.next_num) \
+        if pageViews.has_next else None
+    prev_url = url_for('numberedView', page=pageViews.prev_num) \
+        if pageViews.has_prev else None
     Doc = Document.query.all()
     DocText = ""
     for item in Doc:
         with open("app"+item.txtLocation, "r") as f:
             DocText = f.read()
-    return render_template('numberedView.html', tree=make_tree("app/static/img"), pageViews=pageViews.items, Doc=Doc, DocText=DocText)
+    return render_template('numberedView.html', tree=make_tree("app/static/img"), pageViews=pageViews.items, Doc=Doc, DocText=DocText, next_url=next_url, prev_url=prev_url)
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
