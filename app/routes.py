@@ -58,10 +58,14 @@ def numberedView():
         if pageViews.has_prev else None
     Doc = Document.query.all()
     DocText = ""
+    DocTextNew=""
+    #"pageViews has not attribute text location"
+    with open(pageViews.txtLocation.data, "r") as f:
+            DocTextNew = f.read()
     for item in Doc:
         with open("app"+item.txtLocation, "r") as f:
             DocText = f.read()
-    return render_template('numberedView.html', tree=make_tree("app/static/img"), pageViews=pageViews.items, Doc=Doc, DocText=DocText, next_url=next_url, prev_url=prev_url)
+    return render_template('numberedView.html', tree=make_tree("app/static/img"), pageViews=pageViews.items, Doc=Doc, DocText=DocText, DocTextNew=DocTextNew, next_url=next_url, prev_url=prev_url)
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
