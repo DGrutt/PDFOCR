@@ -68,7 +68,7 @@ def numberedView():
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
-    pdfs = UploadSet('pdfs', ['pdf'])
+    pdfs = UploadSet('pdfs', ['pdf', 'txt', 'img', 'jpeg'])
     app.config['UPLOADED_PDFS_DEST'] = 'app/static/img'
     configure_uploads(app, pdfs)
     if request.method == 'POST' and 'photo' in request.files:
