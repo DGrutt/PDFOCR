@@ -135,6 +135,7 @@ def complete():
 
 @app.route('/OCR_All', methods=['GET', 'POST'])
 def OCR_All():
+    debugVar="WTF"
     if request.method == 'POST':
         def ocr(file_to_ocr):
             im = Image.open(file_to_ocr)
@@ -172,20 +173,21 @@ def OCR_All():
             #        recognized_text[n]="<br>"
             #recognized_text="<br />".join(recognized_text.split("\n"))
             return str(recognized_text).lower()
-
+        
         directory = os.path.join("app/static/img")
         
-        #Doc = Document.query.all()
+        
+        Doc = Document.query.all()
         for root,dirs,files in os.walk(directory):
             for file in files:
                 if file.endswith(".pdf"):
                     pre_fix=file[:-4]
-                    #for item in Doc:
-                    #    if item.txtLocation[:-4]==pre_fix:
-                    #        pass
-                    #    else:
-                    text=pdfOCR("./app/static/img/" + file)
-                    with open(directory+"//"+pre_fix+".txt", 'w') as f: f.write(str(text)) 
+                    for item in Doc:
+                        if str(item.txtLocation[:-4]).endswith(pre_fix):
+                           debugVar= "TESTTTTTTTTTTTTT"
+                        else:
+                            text=pdfOCR("./app/static/img/" + file)
+                            with open(directory+"//"+pre_fix+".txt", 'w') as f: f.write(str(text)) 
                 if file.endswith(".png"):
                     pre_fix=file[:-4]
                     txt=ocr("./app/static/img/"+file)
@@ -199,7 +201,7 @@ def OCR_All():
                             
     #if request.method == 'POST':
     #    pass
-    return(render_template("OCR_all.html"))
+    return render_template("OCR_all.html", debugVar=debugVar)
 
 @app.route('/view', methods=['GET', 'POST'] )
 def view():
