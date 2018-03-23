@@ -1,12 +1,9 @@
 {% extends "base.html" %}
 
 {%block content %}
-    <ul>
-    {% for item in tree.children %} <!-- {{loop.index}} -->
-        <li> {{ item.name[11:] }}<a href="{{ item.name }}"> link</a>
-    {%- endfor %}
-    </ul>
-
+<p>
+<p>
+<p>
 {% if prev_url %}
 <a href= "{{ prev_url }}">Previous Document</a>
 {% endif %}
@@ -29,20 +26,5 @@ Doc Text:
 <p>
 {{DocText}}
 <p>
-pagination object:
-<p>
-{{pageViews}}
-<p>
-Query all:
-{{Doc}}
-{% for item in Doc %}
-    <li> <p> <iframe width ="900" height ="900" src="{{item.imgLocation}}"></iframe>{{item.imgLocation}}
-    <li> <p> <iframe width ="900" height ="900" src="{{item.txtLocation}}"></iframe>{{item.txtLocation}}
-{%- endfor %}
-</a>
-<p>
-Document text:
-<p>
-{{DocText}}
 
 {% endblock %}

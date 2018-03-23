@@ -69,11 +69,15 @@ def numberedView():
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     pdfs = UploadSet('pdfs', ['pdf', 'txt', 'img', 'jpeg'])
+    #if the extension is 4 characters such as jpeg it will cause a problem
     app.config['UPLOADED_PDFS_DEST'] = 'app/static/img'
     configure_uploads(app, pdfs)
     if request.method == 'POST' and 'photo' in request.files:
         filename = pdfs.save(request.files['photo']) 
-        doc =Document(txtLocation="/static/img/"+filename[:-4]+".txt", imgLocation ="/static/img/"+filename, keywordMatches="test")
+        DocTxtLoc ="/static/img/"+ filename[:-4]+".txt"
+        if DocTxtLoc.endswith("..txt"):
+            DocTxtLoc=DocTxtLoc[:-5]+".txt"
+        doc =Document(txtLocation=DocTxtLoc, imgLocation ="/static/img/"+filename, keywordMatches="test")
         db.session.add(doc)
         db.session.commit()
         #need to update above based on https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-ix-pagination with code on submitting posts
@@ -170,16 +174,26 @@ def OCR_All():
             return str(recognized_text).lower()
 
         directory = os.path.join("app/static/img")
+        
+        #Doc = Document.query.all()
         for root,dirs,files in os.walk(directory):
             for file in files:
                 if file.endswith(".pdf"):
                     pre_fix=file[:-4]
+                    #for item in Doc:
+                    #    if item.txtLocation[:-4]==pre_fix:
+                    #        pass
+                    #    else:
                     text=pdfOCR("./app/static/img/" + file)
                     with open(directory+"//"+pre_fix+".txt", 'w') as f: f.write(str(text)) 
                 if file.endswith(".png"):
                     pre_fix=file[:-4]
                     txt=ocr("./app/static/img/"+file)
-                    with open(directory+"//"+pre_fix+".txt", 'w') as f: f.write(str(txt)) 
+                    with open(directory+"//"+pre_fix+".txt", 'w') as f: f.write(str(txt))
+                if file.endswith(".jpeg"):
+                    pre_fix=file[:-5]
+                    txt=ocr("./app/static/img/"+file)
+                    with open(directory+"//"+pre_fix+".txt", 'w') as f: f.write(str(txt))
     #find a way to add this line to the code on the line above so you don't ocr completed files
     #if os.path.isfile(directory+"//"+pre_fix+".txt")==False: 
                             
