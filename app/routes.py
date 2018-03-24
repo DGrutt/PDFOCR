@@ -135,7 +135,7 @@ def complete():
 
 @app.route('/OCR_All', methods=['GET', 'POST'])
 def OCR_All():
-    debugVar="WTF"
+    debugVar="unchanged"
     if request.method == 'POST':
         def ocr(file_to_ocr):
             im = Image.open(file_to_ocr)
@@ -172,7 +172,8 @@ def OCR_All():
             #    if i == "/n":
             #        recognized_text[n]="<br>"
             #recognized_text="<br />".join(recognized_text.split("\n"))
-            return str(recognized_text).lower()
+            recognized_text=str(recognized_text).replace('\\n'," ")
+            return recognized_text.lower()
         
         directory = os.path.join("app/static/img")
         
@@ -184,7 +185,7 @@ def OCR_All():
                     pre_fix=file[:-4]
                     for item in Doc:
                         if str(item.txtLocation[:-4]).endswith(pre_fix):
-                           debugVar= "TESTTTTTTTTTTTTT"
+                           debugVar= "OCR complete"
                         else:
                             text=pdfOCR("./app/static/img/" + file)
                             with open(directory+"//"+pre_fix+".txt", 'w') as f: f.write(str(text)) 
@@ -217,7 +218,8 @@ def view():
     with open("app/static/img/Bostrom.txt", "r") as f: 
         
         recognized_text = f.read()
-        recognized_text=recognized_text.decode("utf-8").replace('\\n'," ")
+        #recognized_text=recognized_text.decode("utf-8").replace('\\n'," ")
+        recognized_text=recognized_text.replace('\\n'," ")
 
     matches = matchFind(recognized_text, keywords)
 
