@@ -34,6 +34,10 @@ def index():
 def angular():
     return render_template('angular.html')
 
+@app.route('/sentiment_all', methods=['GET', 'POST'])
+def sentiment_all():
+    return render_template('sentiment_all.html')
+
 @app.route('/keywordMatches', methods=['GET', 'POST'])
 def keywordMatches():
     form = KeywordForm()
@@ -144,13 +148,10 @@ def OCR_All():
             return txt
            
         def pdfOCR(pdf_to_ocr):
-            #function to OCR pdfs one by one
+            #function to OCR pdfs 
             PDF = pdf_to_ocr 
-            #figure out why wi returns none below when filename is PDF or hardcoded
-            #convertPDF= wi(filename='./app/static/img/Bostrom.pdf', resolution = 300)
             convertPDF=wi(filename=PDF, resolution = 300)
             pdfImage = convertPDF.convert('jpeg')
-            
             
             imageBlobs = []
     
@@ -204,6 +205,7 @@ def OCR_All():
     #if request.method == 'POST':
     #    pass
     return render_template("OCR_all.html", debugVar=debugVar)
+
 
 @app.route('/view', methods=['GET', 'POST'] )
 def view():
