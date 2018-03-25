@@ -1,6 +1,6 @@
 import io
 from flask import Flask, render_template, flash, redirect, url_for, request
-from flask_triangle import Triangle
+#from flask_triangle import Triangle
 from flask_uploads import UploadSet, configure_uploads 
 # add to import line above PDFs and remove IMAGES
 from app import app, db
@@ -136,6 +136,7 @@ def complete():
 @app.route('/OCR_All', methods=['GET', 'POST'])
 def OCR_All():
     debugVar="unchanged"
+    #import pdb; pdb.set_trace()
     if request.method == 'POST':
         def ocr(file_to_ocr):
             im = Image.open(file_to_ocr)

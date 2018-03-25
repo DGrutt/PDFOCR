@@ -12,17 +12,6 @@
     </ul>
     <p>
 
-<div ng-app="myApp" ng-controller="personCtrl">
-<p>The name is {{"lastName|uppercase"|angular}}</p>
-</div>
-
-<script>
-angular.module('myApp', []).controller('personCtrl', function($scope) {
-    $scope.firstName = "John",
-    $scope.lastName = "Doe",
-    $scope.test = "this is a test"
-});
-</script>
 
 {% endblock %}
 
