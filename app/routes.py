@@ -44,6 +44,27 @@ def index():
 def angular():
     return render_template('angular.html')
 
+
+def show_most_informative_features_in_list(classifier, n=10):
+    """
+    Return a nested list of the "most informative" features 
+    used by the classifier along with it's predominant labels
+    !!
+    Try to modify this function like this:
+    http://www.nltk.org/_modules/nltk/classify/naivebayes.html#NaiveBayesClassifier.show_most_informative_features
+    """
+    cpdist = classifier._feature_probdist       
+    # probability distribution for feature values given labels
+    feature_list = []
+    for (fname, fval) in classifier.most_informative_features(n):
+        def labelprob(l):
+            return cpdist[l, fname].prob(fval)
+        labels = sorted([l for l in classifier._labels if fval in cpdist[l, fname].samples()], 
+                        key=labelprob)
+        feature_list.append([fname, labels[-1]])
+    return feature_list
+
+
 @app.route('/sentiment_all', methods=['GET', 'POST'])
 def sentiment_all():
     documents = [(list(movie_reviews.words(fileid)), category)
@@ -84,8 +105,10 @@ def sentiment_all():
     classifier_f.close()
     
     accuracy = nltk.classify.accuracy(classifier, testing_set)*100
-    informativeFeatures = classifier.most_informative_features(15)
-    return render_template('sentiment_all.html', accuracy=accuracy, informativeFeatures=informativeFeatures)
+    informativeFeatures = show_most_informative_features_in_list(classifier, 15)    
+    goal= classifier.show_most_informative_features(15)
+    
+    return render_template('sentiment_all.html', accuracy=accuracy, informativeFeatures=informativeFeatures, goal=goal)
 
 @app.route('/keywordMatches', methods=['GET', 'POST'])
 def keywordMatches():
