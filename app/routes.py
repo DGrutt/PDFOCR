@@ -186,7 +186,7 @@ def numberedView():
     classifier = pickle.load(classifier_f)
     classifier_f.close()
     
-    results = nltk.classify_many(testing_set)
+    results = classifier.classify(testing_set)
     informativeFeatures = show_most_informative_features_in_list(classifier, 15)    
     #ends nltk portion
 
