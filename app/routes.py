@@ -108,7 +108,7 @@ def sentiment_all():
     informativeFeatures = show_most_informative_features_in_list(classifier, 15)    
     goal= classifier.show_most_informative_features(15)
     
-    return render_template('sentiment_all.html', accuracy=accuracy, informativeFeatures=informativeFeatures, goal=goal)
+    return render_template('sentiment_all.html', accuracy=accuracy, informativeFeatures=informativeFeatures, goal=goal, featuresets=featuresets)
 
 @app.route('/keywordMatches', methods=['GET', 'POST'])
 def keywordMatches():
@@ -126,6 +126,8 @@ def keywordMatches():
 
 @app.route('/numberedView', methods=['GET', 'POST'])
 def numberedView():
+   
+    
     page = request.args.get('page', 1, type=int)
     pageViews = Document.query.paginate(page,1,False)
     next_url = url_for('numberedView', page=pageViews.next_num) \
@@ -140,7 +142,57 @@ def numberedView():
         docImage=str(document.imgLocation)
     for document in pageViews.items:
         docKeywordMatches = str(document.keywordMatches)
-    return render_template('numberedView.html', tree=make_tree("app/static/img"), pageViews=pageViews.items, docImage=docImage, Doc=Doc, DocText=DocText, docKeywordMatches=docKeywordMatches, next_url=next_url, prev_url=prev_url)
+    
+
+    #nltk portion 
+    documents = [(list(movie_reviews.words(fileid)), category)
+                    for category in movie_reviews.categories()
+                    for fileid in movie_reviews.fileids(category)]
+
+    random.shuffle(documents)
+
+    all_words = []
+
+    for w in movie_reviews.words():
+        all_words.append(w.lower())
+
+    all_words = nltk.FreqDist(all_words)
+    
+    word_features = list(all_words.keys()) [:3000]
+    
+    def find_features(document):
+        words = set(document)
+        features = {}
+        for w in word_features:
+            features[w]=(w in words)
+        return features
+    
+    featuresets = [(find_features(rev), category) for (rev, category) in documents]
+
+    #featuresets is a list of dictionaries 
+    DocTextList=find_features(DocText)
+    
+    training_set = featuresets[:1900]
+    #testing_set = featuresets[1900:]
+    testing_set = DocTextList   
+
+    classifier = nltk.NaiveBayesClassifier.train(training_set)
+    
+    save_classifier = open("naivebayes.pickle", "wb")
+    pickle.dump(classifier, save_classifier)
+    save_classifier.close()    
+
+    classifier_f = open("naivebayes.pickle", "rb")
+    classifier = pickle.load(classifier_f)
+    classifier_f.close()
+    
+    accuracy = nltk.classify.accuracy(classifier, testing_set)*100
+    informativeFeatures = show_most_informative_features_in_list(classifier, 15)    
+    #ends nltk portion
+
+
+    
+    return render_template('numberedView.html', tree=make_tree("app/static/img"), pageViews=pageViews.items, docImage=docImage, Doc=Doc, DocText=DocText, docKeywordMatches=docKeywordMatches, next_url=next_url, prev_url=prev_url, accuracy=accuracy, informativeFeatures=informativeFeatures)
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
