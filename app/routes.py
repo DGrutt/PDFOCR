@@ -108,7 +108,7 @@ def sentiment_all():
     informativeFeatures = show_most_informative_features_in_list(classifier, 15)    
     goal= classifier.show_most_informative_features(15)
     
-    return render_template('sentiment_all.html', accuracy=accuracy, informativeFeatures=informativeFeatures, goal=goal, featuresets=featuresets)
+    return render_template('sentiment_all.html', accuracy=accuracy, informativeFeatures=informativeFeatures, goal=goal, featuresets=featuresets, documents=documents)
 
 @app.route('/keywordMatches', methods=['GET', 'POST'])
 def keywordMatches():
@@ -186,13 +186,13 @@ def numberedView():
     classifier = pickle.load(classifier_f)
     classifier_f.close()
     
-    accuracy = nltk.classify.accuracy(classifier, testing_set)*100
+    results = nltk.classify_many(testing_set)
     informativeFeatures = show_most_informative_features_in_list(classifier, 15)    
     #ends nltk portion
 
 
     
-    return render_template('numberedView.html', tree=make_tree("app/static/img"), pageViews=pageViews.items, docImage=docImage, Doc=Doc, DocText=DocText, docKeywordMatches=docKeywordMatches, next_url=next_url, prev_url=prev_url, accuracy=accuracy, informativeFeatures=informativeFeatures)
+    return render_template('numberedView.html', tree=make_tree("app/static/img"), pageViews=pageViews.items, docImage=docImage, Doc=Doc, DocText=DocText, docKeywordMatches=docKeywordMatches, next_url=next_url, prev_url=prev_url, results=results, informativeFeatures=informativeFeatures)
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
