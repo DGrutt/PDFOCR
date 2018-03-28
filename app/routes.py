@@ -192,7 +192,7 @@ def numberedView():
 
 
     
-    return render_template('numberedView.html', tree=make_tree("app/static/img"), pageViews=pageViews.items, docImage=docImage, Doc=Doc, DocText=DocText, docKeywordMatches=docKeywordMatches, next_url=next_url, prev_url=prev_url, results=results, informativeFeatures=informativeFeatures)
+    return render_template('numberedView.html', tree=make_tree("app/static/img"), pageViews=pageViews.items, docImage=docImage, Doc=Doc, DocText=DocText, DocTextList=DocTextList, docKeywordMatches=docKeywordMatches, next_url=next_url, prev_url=prev_url, results=results, informativeFeatures=informativeFeatures)
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
