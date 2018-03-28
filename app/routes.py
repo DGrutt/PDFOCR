@@ -190,7 +190,7 @@ def numberedView():
 
 
     
-    return render_template('numberedView.html', tree=make_tree("app/static/img"), pageViews=pageViews.items, docImage=docImage, Doc=Doc, DocText=DocText, DocTextList=DocTextList, docKeywordMatches=docKeywordMatches, next_url=next_url, prev_url=prev_url, results=results, informativeFeatures=informativeFeatures)
+    return render_template('numberedView.html', tree=make_tree("app/static/img"), pageViews=pageViews.items, docImage=docImage, Doc=Doc, DocText=DocText, docKeywordMatches=docKeywordMatches, next_url=next_url, prev_url=prev_url, results=results, informativeFeatures=informativeFeatures)
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
@@ -259,48 +259,48 @@ def complete():
     #return render_template('complete.html', tree=make_tree("/home/dan/PDFOCR/app/static/img"))
     return render_template('complete.html', tree=make_tree("app/static/img"))
 
+
+def ocr(file_to_ocr):
+    im = Image.open(file_to_ocr)
+    txt = pytesseract.image_to_string(im, lang='eng')
+    return txt
+           
+def pdfOCR(pdf_to_ocr):
+    #function to OCR pdfs 
+    PDF = pdf_to_ocr 
+    convertPDF=wi(filename=PDF, resolution = 300)
+    pdfImage = convertPDF.convert('jpeg')
+            
+    imageBlobs = []
+    
+    for img in pdfImage.sequence:
+        imgPage = wi(image = img)
+        imageBlobs.append(imgPage.make_blob('jpeg'))
+
+    recognized_text = []
+
+    for imgBlob in imageBlobs:
+        im = Image.open(io.BytesIO(imgBlob))
+        text = pytesseract.image_to_string(im, lang = 'eng')
+        outputName=PDF[:-4]
+        outputName=outputName[8:]
+        testvar = './app/static/txts/'+outputName+ '.txt'
+        recognized_text.append(text)
+           
+             
+    recognized_text=str(recognized_text).replace('\\n'," ")
+    return recognized_text.lower()
+
+
+
+
 @app.route('/OCR_All', methods=['GET', 'POST'])
 def OCR_All():
     debugVar="unchanged"
     #import pdb; pdb.set_trace()
     if request.method == 'POST':
-        def ocr(file_to_ocr):
-            im = Image.open(file_to_ocr)
-            txt = pytesseract.image_to_string(im, lang='eng')
-            return txt
-           
-        def pdfOCR(pdf_to_ocr):
-            #function to OCR pdfs 
-            PDF = pdf_to_ocr 
-            convertPDF=wi(filename=PDF, resolution = 300)
-            pdfImage = convertPDF.convert('jpeg')
-            
-            imageBlobs = []
-    
-            for img in pdfImage.sequence:
-                imgPage = wi(image = img)
-                imageBlobs.append(imgPage.make_blob('jpeg'))
-
-            recognized_text = []
-
-            for imgBlob in imageBlobs:
-                im = Image.open(io.BytesIO(imgBlob))
-                text = pytesseract.image_to_string(im, lang = 'eng')
-                outputName=PDF[:-4]
-                outputName=outputName[8:]
-                testvar = './app/static/txts/'+outputName+ '.txt'
-                recognized_text.append(text)
-           
-             
-            #for n, i in enumerate(recognized_text):
-            #    if i == "/n":
-            #        recognized_text[n]="<br>"
-            #recognized_text="<br />".join(recognized_text.split("\n"))
-            recognized_text=str(recognized_text).replace('\\n'," ")
-            return recognized_text.lower()
         
-        directory = os.path.join("app/static/img")
-        
+        directory = os.path.join("app/static/img")        
         
         Doc = Document.query.all()
         for root,dirs,files in os.walk(directory):
@@ -308,28 +308,28 @@ def OCR_All():
                 if file.endswith(".pdf"):
                     pre_fix=file[:-4]
                     for item in Doc:
-                        if str(item.txtLocation[:-4]).endswith(pre_fix):
-                           debugVar= "OCR complete"
-                        else:
-                            text=pdfOCR("./app/static/img/" + file)
-                            with open(directory+"//"+pre_fix+".txt", 'w') as f: f.write(str(text))
-                            f.close() 
+                        #if str(item.txtLocation[:-4]).endswith(pre_fix):
+                        #   debugVar= "OCR complete"
+                        #else:
+                        text=pdfOCR("./app/static/img/" + file)
+                        with open(directory+"//"+pre_fix+".txt", 'w') as f: f.write(str(text))
+                        f.close() 
                 if file.endswith(".png"):
                     pre_fix=file[:-4] 
                     for item in Doc:
-                        if str(item.txtLocation[:-4]).endswith(pre_fix):
-                           debugVar= "OCR complete"
-                    txt=ocr("./app/static/img/"+file)
-                    with open(directory+"//"+pre_fix+".txt", 'w') as f: f.write(str(txt))
-                    f.close()
+                    #    if str(item.txtLocation[:-4]).endswith(pre_fix):
+                    #       debugVar= "OCR complete"
+                        txt=ocr("./app/static/img/"+file)
+                        with open(directory+"//"+pre_fix+".txt", 'w') as f: f.write(str(txt))
+                        f.close()
                 if file.endswith(".jpeg"):
                     pre_fix=file[:-5]
                     for item in Doc:
-                        if str(item.txtLocation[:-4]).endswith(pre_fix):
-                           debugVar= "OCR complete"
-                    txt=ocr("./app/static/img/"+file)
-                    with open(directory+"//"+pre_fix+".txt", 'w') as f: f.write(str(txt))
-                    f.close()
+                    #    if str(item.txtLocation[:-4]).endswith(pre_fix):
+                    #       debugVar= "OCR complete"
+                        txt=ocr("./app/static/img/"+file)
+                        with open(directory+"//"+pre_fix+".txt", 'w') as f: f.write(str(txt))
+                        f.close()
     #find a way to add this line to the code on the line above so you don't ocr completed files
     #if os.path.isfile(directory+"//"+pre_fix+".txt")==False: 
                             
