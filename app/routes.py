@@ -21,7 +21,7 @@ from nltk.classify import *
 import pickle
 #adding nltk
 
-
+import shutil
 
 @app.route('/')
 @app.route('/index')
@@ -200,10 +200,10 @@ def upload():
     configure_uploads(app, pdfs)
     if request.method == 'POST' and 'photo' in request.files:
         filename = pdfs.save(request.files['photo']) 
-        DocTxtLoc ="/static/img/"+ filename[:-4]+".txt"
+        DocTxtLoc ="/static/txts/"+ filename[:-4]+".txt"
         if DocTxtLoc.endswith("..txt"):
             DocTxtLoc=DocTxtLoc[:-5]+".txt"
-        doc =Document(txtLocation=DocTxtLoc, imgLocation ="/static/img/"+filename, keywordMatches="test")
+        doc =Document(txtLocation=DocTxtLoc, imgLocation ="/static/OCRdfiles/"+filename, keywordMatches="test")
         db.session.add(doc)
         db.session.commit()
         #need to update above based on https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-ix-pagination with code on submitting posts
@@ -312,8 +312,11 @@ def OCR_All():
                         #   debugVar= "OCR complete"
                         #else:
                         text=pdfOCR("./app/static/img/" + file)
-                        with open(directory+"//"+pre_fix+".txt", 'w') as f: f.write(str(text))
-                        f.close() 
+                        with open("app/static/txts/"+pre_fix+".txt", 'w') as f: f.write(str(text))
+                        f.close()
+                        shutil.copy2('./app/static/img/' + file, './app/static/OCRdfiles/')
+                        os.remove('./app/static/img/' + file)
+ 
                 if file.endswith(".png"):
                     pre_fix=file[:-4] 
                     for item in Doc:
@@ -321,7 +324,9 @@ def OCR_All():
                     #       debugVar= "OCR complete"
                         txt=ocr("./app/static/img/"+file)
                         with open(directory+"//"+pre_fix+".txt", 'w') as f: f.write(str(txt))
-                        f.close()
+                        f.close()   
+                        shutil.copy2('./app/static/img/' + file, './app/static/OCRdfiles/')
+                
                 if file.endswith(".jpeg"):
                     pre_fix=file[:-5]
                     for item in Doc:
@@ -329,7 +334,9 @@ def OCR_All():
                     #       debugVar= "OCR complete"
                         txt=ocr("./app/static/img/"+file)
                         with open(directory+"//"+pre_fix+".txt", 'w') as f: f.write(str(txt))
-                        f.close()
+                        f.close() 
+                        shutil.copy2('./app/static/img/' + file, './app/static/OCRdfiles/')
+
     #find a way to add this line to the code on the line above so you don't ocr completed files
     #if os.path.isfile(directory+"//"+pre_fix+".txt")==False: 
                             
