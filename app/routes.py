@@ -126,8 +126,7 @@ def keywordMatches():
 
 @app.route('/numberedView', methods=['GET', 'POST'])
 def numberedView():
-   
-    
+       
     page = request.args.get('page', 1, type=int)
     pageViews = Document.query.paginate(page,1,False)
     next_url = url_for('numberedView', page=pageViews.next_num) \
@@ -143,7 +142,6 @@ def numberedView():
     for document in pageViews.items:
         docKeywordMatches = str(document.keywordMatches)
     
-
     #nltk portion 
     documents = [(list(movie_reviews.words(fileid)), category)
                     for category in movie_reviews.categories()
@@ -170,7 +168,7 @@ def numberedView():
     featuresets = [(find_features(rev), category) for (rev, category) in documents]
 
     #featuresets is a list of dictionaries 
-    DocTextList=find_features(DocText)
+    DocTextList=find_features(DocText.split())
     
     training_set = featuresets[:1900]
     #testing_set = featuresets[1900:]
@@ -314,15 +312,24 @@ def OCR_All():
                            debugVar= "OCR complete"
                         else:
                             text=pdfOCR("./app/static/img/" + file)
-                            with open(directory+"//"+pre_fix+".txt", 'w') as f: f.write(str(text)) 
+                            with open(directory+"//"+pre_fix+".txt", 'w') as f: f.write(str(text))
+                            f.close() 
                 if file.endswith(".png"):
-                    pre_fix=file[:-4]
+                    pre_fix=file[:-4] 
+                    for item in Doc:
+                        if str(item.txtLocation[:-4]).endswith(pre_fix):
+                           debugVar= "OCR complete"
                     txt=ocr("./app/static/img/"+file)
                     with open(directory+"//"+pre_fix+".txt", 'w') as f: f.write(str(txt))
+                    f.close()
                 if file.endswith(".jpeg"):
                     pre_fix=file[:-5]
+                    for item in Doc:
+                        if str(item.txtLocation[:-4]).endswith(pre_fix):
+                           debugVar= "OCR complete"
                     txt=ocr("./app/static/img/"+file)
                     with open(directory+"//"+pre_fix+".txt", 'w') as f: f.write(str(txt))
+                    f.close()
     #find a way to add this line to the code on the line above so you don't ocr completed files
     #if os.path.isfile(directory+"//"+pre_fix+".txt")==False: 
                             
