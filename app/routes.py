@@ -203,7 +203,7 @@ def upload():
         DocTxtLoc ="/static/txts/"+ filename[:-4]+".txt"
         if DocTxtLoc.endswith("..txt"):
             DocTxtLoc=DocTxtLoc[:-5]+".txt"
-        doc =Document(txtLocation=DocTxtLoc, imgLocation ="/static/OCRdfiles/"+filename, keywordMatches="test")
+        doc =Document(txtLocation=DocTxtLoc, imgLocation ="/static/OCRdfiles/"+filename, keywordMatches="test", sentiment="blank")
         db.session.add(doc)
         db.session.commit()
         #need to update above based on https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-ix-pagination with code on submitting posts
