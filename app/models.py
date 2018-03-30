@@ -7,6 +7,10 @@ class Document(db.Model):
     keywordMatches= db.Column(db.String(300), index=True, unique=False)
     sentiment = db.Column(db.String(300), index=True, unique=False)
 
+    
+    def __repr__(self):
+        return '<Document {} {} {} {}>'.format(self.imgLocation, self.txtLocation, self.keywordMatches, self.sentiment)
+
 class Raw_Text(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     page_number = (db.Integer)
@@ -14,5 +18,5 @@ class Raw_Text(db.Model):
     document_id = db.Column(db.Integer, db.ForeignKey('document.id'))
 
     def __repr__(self):
-        return '<Document {} {} {} {}>'.format("text "+self.imgLocation, self.txtLocation, self.keywordMatches, self.sentiment)
+        return '<Raw_Text {} {} {} {}>'.format(self.id, self.page_number, self.page_text, self.document_id)
 
