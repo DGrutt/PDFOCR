@@ -281,12 +281,20 @@ def pdfOCR(pdf_to_ocr):
 
     recognized_text = []
 
-    for imgBlob in imageBlobs:
+    for page, imgBlob in enumerate((imageBlobs),1):
+        #store in database location = page
         im = Image.open(io.BytesIO(imgBlob))
         text = pytesseract.image_to_string(im, lang = 'eng')
         outputName=PDF[:-4]
         outputName=outputName[8:]
         testvar = './app/static/txts/'+outputName+ '.txt'
+        #store in database location = text
+        
+        #location= raw_text(id= , page_number = , page_text = , document_id = )
+        #doc =Document(txtLocation=DocTxtLoc, imgLocation ="/static/OCRdfiles/"+filename, keywordMatches="test", sentiment="blank")
+        #db.session.add(doc)
+        #db.session.commit()
+
         recognized_text.append(text)
                         
     recognized_text=str(recognized_text).replace('\\n'," ")

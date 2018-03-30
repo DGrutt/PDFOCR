@@ -7,7 +7,7 @@ class Document(db.Model):
     keywordMatches= db.Column(db.String(300), index=True, unique=False)
     sentiment = db.Column(db.String(300), index=True, unique=False)
 
-class raw_text(db.Model):
+class Raw_Text(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     page_number = (db.Integer)
     page_text = (db.Text)
