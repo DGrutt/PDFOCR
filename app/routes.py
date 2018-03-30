@@ -104,11 +104,13 @@ def sentiment_all():
     classifier = pickle.load(classifier_f)
     classifier_f.close()
     
-    accuracy = nltk.classify.accuracy(classifier, testing_set)*100
-    informativeFeatures = show_most_informative_features_in_list(classifier, 15)    
-    goal= classifier.show_most_informative_features(15)
+    #accuracy = nltk.classify.accuracy(classifier, testing_set)*100
+    informativeFeatures = show_most_informative_features_in_list(classifier, 15)      
     
-    return render_template('sentiment_all.html', accuracy=accuracy, informativeFeatures=informativeFeatures, goal=goal, featuresets=featuresets, documents=documents)
+    #in below copy from numberedView and get sentiment one by one
+    #results = classifier.classify(testing_set)
+     
+    return render_template('sentiment_all.html', informativeFeatures=informativeFeatures, featuresets=featuresets, documents=documents)
 
 @app.route('/keywordMatches', methods=['GET', 'POST'])
 def keywordMatches():
@@ -286,13 +288,9 @@ def pdfOCR(pdf_to_ocr):
         outputName=outputName[8:]
         testvar = './app/static/txts/'+outputName+ '.txt'
         recognized_text.append(text)
-           
-             
+                        
     recognized_text=str(recognized_text).replace('\\n'," ")
     return recognized_text.lower()
-
-
-
 
 @app.route('/OCR_All', methods=['GET', 'POST'])
 def OCR_All():
