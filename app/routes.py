@@ -267,6 +267,11 @@ def ocr(file_to_ocr):
            
 def pdfOCR(pdf_to_ocr):
     #function to OCR pdfs 
+    import pdb; pdb.set_trace()
+    imgLoc=pdf_to_ocr[17:]
+    imgLoc= '/static/OCRdfiles/' +imgLoc
+    databaseLoc=Document.query.filter_by(imgLocation=imgLoc).first()
+    print(databaseLoc)
     PDF = pdf_to_ocr 
     convertPDF=wi(filename=PDF, resolution = 300)
     pdfImage = convertPDF.convert('jpeg')
