@@ -110,7 +110,7 @@ def sentiment_all():
     #in below copy from numberedView and get sentiment one by one
     #results = classifier.classify(testing_set)
      
-    return render_template('sentiment_all.html', informativeFeatures=informativeFeatures, featuresets=featuresets, documents=documents)
+    return render_template('sentiment_all.html', informativeFeatures=informativeFeatures)
 
 @app.route('/keywordMatches', methods=['GET', 'POST'])
 def keywordMatches():
@@ -189,8 +189,6 @@ def numberedView():
     results = classifier.classify(testing_set)
     informativeFeatures = show_most_informative_features_in_list(classifier, 15)    
     #ends nltk portion
-
-
     
     return render_template('numberedView.html', tree=make_tree("app/static/img"), pageViews=pageViews.items, docImage=docImage, Doc=Doc, DocText=DocText, docKeywordMatches=docKeywordMatches, next_url=next_url, prev_url=prev_url, results=results, informativeFeatures=informativeFeatures)
 

@@ -6,6 +6,7 @@ class Document(db.Model):
     imgLocation = db.Column(db.String(300), index=True, unique=True)
     keywordMatches= db.Column(db.String(300), index=True, unique=False)
     sentiment = db.Column(db.String(300), index=True, unique=False)
+    texts = db.relationship('Raw_Text', backref='source', lazy='dynamic')
 
     
     def __repr__(self):
