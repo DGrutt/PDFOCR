@@ -5,7 +5,7 @@ from flask_uploads import UploadSet, configure_uploads
 # add to import line above PDFs and remove IMAGES
 from app import app, db
 from app.forms import ViewForm, KeywordForm
-from app.models import Document
+from app.models import Document, Raw_Text
 from PIL import Image
 import pytesseract
 from wand.image import Image as wi
@@ -271,7 +271,19 @@ def pdfOCR(pdf_to_ocr):
     imgLoc=pdf_to_ocr[17:]
     imgLoc= '/static/OCRdfiles/' +imgLoc
     databaseLoc=Document.query.filter_by(imgLocation=imgLoc).first()
+    #databaseLoc=Document(id=   sentiment='this is a test')
+    #databaseLoc=Document(id=databaseLoc.id, txtLocation=databaseLoc.txtLocation, imgLocation =databaseLoc.imgLocation, keywordMatches=databaseLoc.keywordMatches, sentiment="this is a test of changing the database")
+    databaseLoc.sentiment="this is a test"
     print(databaseLoc)
+    #print(databaseLoc.txtLocation)
+    db.session.add(databaseLoc)
+    db.session.commit()
+    print(Document.query.all())
+    newText = Raw_Text(document_id=databaseLoc.id, page_number=1, page_text="text")
+    print(newText)
+    db.session.add(newText)
+    db.session.commit()
+    print(Raw_Text.query.all())
     PDF = pdf_to_ocr 
     convertPDF=wi(filename=PDF, resolution = 300)
     pdfImage = convertPDF.convert('jpeg')
