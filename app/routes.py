@@ -267,7 +267,7 @@ def ocr(file_to_ocr):
            
 def pdfOCR(pdf_to_ocr):
     #function to OCR pdfs 
-    import pdb; pdb.set_trace()
+    #import pdb; pdb.set_trace()
     imgLoc=pdf_to_ocr[17:]
     imgLoc= '/static/OCRdfiles/' +imgLoc
     databaseLoc=Document.query.filter_by(imgLocation=imgLoc).first()
@@ -279,11 +279,11 @@ def pdfOCR(pdf_to_ocr):
     db.session.add(databaseLoc)
     db.session.commit()
     print(Document.query.all())
-    newText = Raw_Text(document_id=databaseLoc.id, page_number=1, page_text="text")
-    print(newText)
-    db.session.add(newText)
-    db.session.commit()
-    print(Raw_Text.query.all())
+    #newText = Raw_Text(document_id=databaseLoc.id, page_number=1, page_text="text")
+    #print(newText)
+    #db.session.add(newText)
+    #db.session.commit()
+    #print(Raw_Text.query.all())
     PDF = pdf_to_ocr 
     convertPDF=wi(filename=PDF, resolution = 300)
     pdfImage = convertPDF.convert('jpeg')
@@ -294,15 +294,20 @@ def pdfOCR(pdf_to_ocr):
         imgPage = wi(image = img)
         imageBlobs.append(imgPage.make_blob('jpeg'))
 
-    recognized_text = []
+    #recognized_text = []
 
     for page, imgBlob in enumerate((imageBlobs),1):
         #store in database location = page
         im = Image.open(io.BytesIO(imgBlob))
         text = pytesseract.image_to_string(im, lang = 'eng')
-        outputName=PDF[:-4]
-        outputName=outputName[8:]
-        testvar = './app/static/txts/'+outputName+ '.txt'
+        newText = Raw_Text(document_id=databaseLoc.id, page_number=page, page_text=text)
+        print(newText)
+        db.session.add(newText)
+        db.session.commit()
+
+        #outputName=PDF[:-4]
+        #outputName=outputName[8:]
+        #testvar = './app/static/txts/'+outputName+ '.txt'
         #store in database location = text
         
         #location= raw_text(id= , page_number = , page_text = , document_id = )
@@ -310,10 +315,10 @@ def pdfOCR(pdf_to_ocr):
         #db.session.add(doc)
         #db.session.commit()
 
-        recognized_text.append(text)
+        #recognized_text.append(text)
                         
-    recognized_text=str(recognized_text).replace('\\n'," ")
-    return recognized_text.lower()
+    #recognized_text=str(recognized_text).replace('\\n'," ")
+    #return recognized_text.lower()
 
 @app.route('/OCR_All', methods=['GET', 'POST'])
 def OCR_All():
